@@ -12,14 +12,19 @@ include(CTest)
 enable_testing()
 
 include_directories("/usr/local/include")
+# find lib of glfw
+find_package(PkgConfig)
+pkg_search_module(GLFW REQUIRED glfw3)
+link_directories(${GLFW_LIBRARY_DIRS})
+
 # removing prefix "GLFW/", so 'glad.h' can rank in front of 'glfw' automatically
-include_directories("/usr/local/include/GLFW")
+include_directories("${GLFW_INCLUDE_DIRS}/GLFW/")
 
 # all .c files
 aux_source_directory(. DIR_SRCS)
 add_executable(program ${DIR_SRCS})
 target_link_libraries(${PROJECT_NAME}
-    -lglfw3
+    -lglfw
     -lm   # -lm need behind glfw3, glfw3 want powf(), 
 )
 
